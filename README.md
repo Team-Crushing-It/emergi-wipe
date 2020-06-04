@@ -1,2 +1,2 @@
 # Emergency Windshield Wiper
-![](/blob/master/lib/assets/EmerWipeLogo.png)
+![](/lib/assets/EmerWipeLogo.png)
