@@ -1,2 +1,2 @@
-# by TCi
+# TCi
 ![](/lib/assets/EmerWipeLogo.png)
