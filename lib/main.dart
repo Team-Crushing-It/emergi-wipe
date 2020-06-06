@@ -103,6 +103,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
         getPairedDevices();
       });
     });
+    void showAlert(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Text("hi"),
+              ));
+    }
   }
 
   @override
