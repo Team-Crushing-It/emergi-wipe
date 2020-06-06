@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bluetooth/speed_manager.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 void main() => runApp(MyApp());
@@ -15,10 +16,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        backgroundColor: Colors.white,
+        accentColor: Colors.black,
+        brightness: Brightness.light,
+        fontFamily: "Courier Prime",
       ),
-      home: BluetoothApp(),
+      darkTheme: ThemeData(
+        primarySwatch: Colors.blue,
+        backgroundColor: Colors.grey[900],
+        accentColor: Colors.white,
+        brightness: Brightness.dark,
+        fontFamily: "Courier Prime",
+      ),
+      home: SpeedManager(),
     );
   }
 }
