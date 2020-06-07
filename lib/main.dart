@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth/speed_manager.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
+import 'on_off_switch.dart';
+import 'speed_bar.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,20 +21,18 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       themeMode: ThemeMode.dark,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
         accentColor: Colors.black,
         brightness: Brightness.light,
         fontFamily: "Courier Prime",
       ),
       darkTheme: ThemeData(
-        primarySwatch: Colors.blue,
         backgroundColor: Colors.grey[900],
         accentColor: Colors.white,
         brightness: Brightness.dark,
         fontFamily: "Courier Prime",
       ),
-      home: SpeedManager(),
+      home: BluetoothApp(),
     );
   }
 }
@@ -92,9 +93,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     enableBluetooth();
 
     // Listen for further state changes
-    FlutterBluetoothSerial.instance
-        .onStateChanged()
-        .listen((BluetoothState state) {
+    FlutterBluetoothSerial.instance.onStateChanged().listen((BluetoothState state) {
       setState(() {
         _bluetoothState = state;
         if (_bluetoothState == BluetoothState.STATE_OFF) {
@@ -194,156 +193,130 @@ class _BluetoothAppState extends State<BluetoothApp> {
             ),
           ],
         ),
-        body: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Visibility(
-                visible: _isButtonUnavailable &&
-                    _bluetoothState == BluetoothState.STATE_ON,
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.yellow,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Visibility(
+                  visible: _isButtonUnavailable && _bluetoothState == BluetoothState.STATE_ON,
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.yellow,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'Enable Bluetooth',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    Switch(
-                      value: _bluetoothState.isEnabled,
-                      onChanged: (bool value) {
-                        future() async {
-                          if (value) {
-                            await FlutterBluetoothSerial.instance
-                                .requestEnable();
-                          } else {
-                            await FlutterBluetoothSerial.instance
-                                .requestDisable();
-                          }
-
-                          await getPairedDevices();
-                          _isButtonUnavailable = false;
-
-                          if (_connected) {
-                            _disconnect();
-                          }
-                        }
-
-                        future().then((_) {
-                          setState(() {});
-                        });
-                      },
-                    )
-                  ],
-                ),
-              ),
-              Stack(
-                children: <Widget>[
-                  Column(
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Device:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            DropdownButton(
-                              items: _getDeviceItems(),
-                              onChanged: (value) =>
-                                  setState(() => _device = value),
-                              value: _devicesList.isNotEmpty ? _device : null,
-                            ),
-                            RaisedButton(
-                              onPressed: _isButtonUnavailable
-                                  ? null
-                                  : _connected ? _disconnect : _connect,
-                              child:
-                                  Text(_connected ? 'Disconnect' : 'Connect'),
-                            ),
-                          ],
+                      Expanded(
+                        child: Text(
+                          'Enable Bluetooth',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            side: new BorderSide(
-                              color: _deviceState == 0
-                                  ? colors['neutralBorderColor']
-                                  : _deviceState == 1
-                                      ? colors['onBorderColor']
-                                      : colors['offBorderColor'],
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          elevation: _deviceState == 0 ? 4 : 0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Text(
-                                    "Emer-wipe Speed",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: _deviceState == 0
-                                          ? colors['neutralTextColor']
-                                          : _deviceState == 1
-                                              ? colors['onTextColor']
-                                              : colors['offTextColor'],
-                                    ),
-                                  ),
-                                ),
-                                FlatButton(
-                                  onPressed: _connected
-                                      ? _sendOnMessageToBluetooth
-                                      : null,
-                                  child: Text("Low"),
-                                ),
-                                FlatButton(
-                                  onPressed: _connected
-                                      ? _sendOffMessageToBluetooth
-                                      : null,
-                                  child: Text("High"),
-                                ),
-                              ],
-                            ),
-                          ),
+                      Switch(
+                        value: _bluetoothState.isEnabled,
+                        onChanged: (bool value) {
+                          future() async {
+                            if (value) {
+                              await FlutterBluetoothSerial.instance.requestEnable();
+                            } else {
+                              await FlutterBluetoothSerial.instance.requestDisable();
+                            }
+
+                            await getPairedDevices();
+                            _isButtonUnavailable = false;
+
+                            if (_connected) {
+                              _disconnect();
+                            }
+                          }
+
+                          future().then((_) {
+                            setState(() {});
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Device:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
+                      DropdownButton(
+                        items: _getDeviceItems(),
+                        onChanged: (value) => setState(() => _device = value),
+                        value: _devicesList.isNotEmpty ? _device : null,
+                      ),
+                      RaisedButton(
+                        onPressed: _isButtonUnavailable ? null : _connected ? _disconnect : _connect,
+                        child: Text(_connected ? 'Disconnect' : 'Connect'),
                       ),
                     ],
                   ),
-                  Container(
-                    color: Colors.blue,
-                  ),
-                ],
-              ),
-              
-            ],
+                ),
+//                Padding(
+//                  padding: const EdgeInsets.all(16.0),
+//                  child: Card(
+//                    shape: RoundedRectangleBorder(
+//                      side: new BorderSide(
+//                        color: _deviceState == 0
+//                            ? colors['neutralBorderColor']
+//                            : _deviceState == 1 ? colors['onBorderColor'] : colors['offBorderColor'],
+//                        width: 3,
+//                      ),
+//                      borderRadius: BorderRadius.circular(4.0),
+//                    ),
+//                    elevation: _deviceState == 0 ? 4 : 0,
+//                    child: Padding(
+//                      padding: const EdgeInsets.all(8.0),
+//                      child: Row(
+//                        children: <Widget>[
+//                          Expanded(
+//                            child: Text(
+//                              "Emer-wipe Speed",
+//                              style: TextStyle(
+//                                fontSize: 20,
+//                                color: _deviceState == 0
+//                                    ? colors['neutralTextColor']
+//                                    : _deviceState == 1 ? colors['onTextColor'] : colors['offTextColor'],
+//                              ),
+//                            ),
+//                          ),
+//                          FlatButton(
+//                            onPressed: _connected ? _sendOnMessageToBluetooth : null,
+//                            child: Text("Low"),
+//                          ),
+//                          FlatButton(
+//                            onPressed: _connected ? _sendOffMessageToBluetooth : null,
+//                            child: Text("High"),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//                  ),
+//                ),
+                SpeedManager(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-  
 
   // Create the List of devices to be shown in Dropdown Menu
   List<DropdownMenuItem<BluetoothDevice>> _getDeviceItems() {
@@ -372,8 +345,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
       show('No device selected');
     } else {
       if (!isConnected) {
-        await BluetoothConnection.toAddress(_device.address)
-            .then((_connection) {
+        await BluetoothConnection.toAddress(_device.address).then((_connection) {
           print('Connected to the device');
           connection = _connection;
           setState(() {
@@ -444,6 +416,18 @@ class _BluetoothAppState extends State<BluetoothApp> {
     }
   }
 
+  _increaseSpeed() {}
+
+  _decreaseSpeed() {}
+
+  _toggleOnOff() async {
+    if (_deviceState == 1) {
+      _sendOffMessageToBluetooth();
+    } else {
+      _sendOnMessageToBluetooth();
+    }
+  }
+
   // Method to send message,
   // for turning the Bluetooth device on
   void _sendOnMessageToBluetooth() async {
@@ -481,5 +465,15 @@ class _BluetoothAppState extends State<BluetoothApp> {
         duration: duration,
       ),
     );
+  }
+}
+
+class DebugBorder extends StatelessWidget {
+  final Widget child;
+
+  const DebugBorder({this.child});
+  @override
+  Widget build(BuildContext context) {
+    return Container(decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)), child: child);
   }
 }
