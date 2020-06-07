@@ -53,7 +53,7 @@ class SpeedManager extends StatelessWidget {
                 ),
               ),
             ),
-            OnOffSwitch(isOn: isOn == 1 ? true : false, onTap: toggleOnOff)
+            OnOffSwitch(isOn: isOn > 0 ? true : false, onTap: toggleOnOff)
           ]),
     );
   }

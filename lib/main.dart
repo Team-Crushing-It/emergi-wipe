@@ -19,11 +19,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         backgroundColor: Colors.white,
         accentColor: Colors.black,
         brightness: Brightness.light,
+        primaryColor: Colors.deepOrange,
         fontFamily: "Courier Prime",
       ),
       darkTheme: ThemeData(
@@ -53,7 +54,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
   BluetoothConnection connection;
 
   int _deviceState;
-  int _speed;
 
   bool isDisconnecting = false;
 
@@ -87,7 +87,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
 
     _deviceState = 0; // neutral
-    _speed = 0;
 
     // If the bluetooth of the device is not enabled,
     // then request permission to turn on bluetooth
@@ -202,81 +201,80 @@ class _BluetoothAppState extends State<BluetoothApp> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Visibility(
-                  visible: _isButtonUnavailable && _bluetoothState == BluetoothState.STATE_ON,
-                  child: LinearProgressIndicator(
-                    backgroundColor: Colors.yellow,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                  ),
+        body: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Visibility(
+                visible: _isButtonUnavailable && _bluetoothState == BluetoothState.STATE_ON,
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.yellow,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          'Enable Bluetooth',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        'Enable Bluetooth',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
                         ),
                       ),
-                      Switch(
-                        value: _bluetoothState.isEnabled,
-                        onChanged: (bool value) {
-                          future() async {
-                            if (value) {
-                              await FlutterBluetoothSerial.instance.requestEnable();
-                            } else {
-                              await FlutterBluetoothSerial.instance.requestDisable();
-                            }
-
-                            await getPairedDevices();
-                            _isButtonUnavailable = false;
-
-                            if (_connected) {
-                              _disconnect();
-                            }
+                    ),
+                    Switch(
+                      value: _bluetoothState.isEnabled,
+                      onChanged: (bool value) {
+                        future() async {
+                          if (value) {
+                            await FlutterBluetoothSerial.instance.requestEnable();
+                          } else {
+                            await FlutterBluetoothSerial.instance.requestDisable();
                           }
 
-                          future().then((_) {
-                            setState(() {});
-                          });
-                        },
-                      )
-                    ],
-                  ),
+                          await getPairedDevices();
+                          _isButtonUnavailable = false;
+
+                          if (_connected) {
+                            _disconnect();
+                          }
+                        }
+
+                        future().then((_) {
+                          setState(() {});
+                        });
+                      },
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Device:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Device:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
-                      DropdownButton(
-                        items: _getDeviceItems(),
-                        onChanged: (value) => setState(() => _device = value),
-                        value: _devicesList.isNotEmpty ? _device : null,
-                      ),
-                      RaisedButton(
-                        onPressed: _isButtonUnavailable ? null : _connected ? _disconnect : _connect,
-                        child: Text(_connected ? 'Disconnect' : 'Connect'),
-                      ),
-                    ],
-                  ),
+                    ),
+                    DropdownButton(
+                      items: _getDeviceItems(),
+                      onChanged: (value) => setState(() => _device = value),
+                      value: _devicesList.isNotEmpty ? _device : null,
+                    ),
+                    RaisedButton(
+                      onPressed: _isButtonUnavailable ? null : _connected ? _disconnect : _connect,
+                      child: Text(_connected ? 'Disconnect' : 'Connect'),
+                    ),
+                  ],
                 ),
+              ),
 //                Padding(
 //                  padding: const EdgeInsets.all(16.0),
 //                  child: Card(
@@ -318,9 +316,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
 //                    ),
 //                  ),
 //                ),
-                SpeedManager(increaseSpeed: _increaseSpeed, decreaseSpeed: _decreaseSpeed, toggleOnOff: _toggleOnOff, isOn: _deviceState, speed: _speed,),
-              ],
-            ),
+              Builder(builder: (context) => SpeedManager(increaseSpeed: _increaseSpeed, decreaseSpeed: _decreaseSpeed, toggleOnOff: _toggleOnOff, isOn: _deviceState, speed: _deviceState,)),
+            ],
           ),
         ),
       ),
@@ -425,22 +422,22 @@ class _BluetoothAppState extends State<BluetoothApp> {
     }
   }
 
-  // increase _speed by one and increase device speed by one
+  // increase _deviceState by one and increase device speed by one
   _increaseSpeed() {
     setState(() {
-      _speed += 1;
+      _deviceState += 1;
     });
   }
 
-    // decrease _speed by one and decrease device speed by one
+    // decrease _deviceState by one and decrease device speed by one
   _decreaseSpeed() {
     setState(() {
-      _speed -= 1;
+      _deviceState -= 1;
     });
   }
 
   _toggleOnOff() async {
-    if (_deviceState == 1) {
+    if (_deviceState > 0) {
       _sendOffMessageToBluetooth();
     } else {
       _sendOnMessageToBluetooth();
@@ -450,28 +447,27 @@ class _BluetoothAppState extends State<BluetoothApp> {
   // Method to send message,
   // for turning the Bluetooth device on
 
-  // send the signal to make the device speed equal to _speed. that way, state is saved
+  // send the signal to make the device speed equal to _deviceState. that way, state is saved
   // also set _deviceState to one
   void _sendOnMessageToBluetooth() async {
     connection.output.add(utf8.encode("1" + "\r\n"));
     await connection.output.allSent;
     show('Operate on low speed');
     setState(() {
-      _deviceState = 1; // device on
+      //_deviceState = 1;
     });
   }
 
   // Method to send message,
   // for turning the Bluetooth device off
 
-  // send the signal to make the speed zero, but don't set _speed to zero.
-  // also set _deviceState to zero
+  // send the signal to make the speed zero, but don't set _deviceState to zero.
   void _sendOffMessageToBluetooth() async {
     connection.output.add(utf8.encode("0" + "\r\n"));
     await connection.output.allSent;
     show('Operate on high speed');
     setState(() {
-      _deviceState = -1; // device off
+      //_deviceState = -1; // device off
     });
   }
 
