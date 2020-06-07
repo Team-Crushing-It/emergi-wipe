@@ -425,17 +425,17 @@ class _BluetoothAppState extends State<BluetoothApp> {
     }
   }
 
-  // decrease _speed by one and decrease device speed by one
+  // increase _speed by one and increase device speed by one
   _increaseSpeed() {
     setState(() {
       _speed += 1;
     });
   }
 
-    // increase _speed by one and increase device speed by one
+    // decrease _speed by one and decrease device speed by one
   _decreaseSpeed() {
     setState(() {
-      _speed += 1;
+      _speed -= 1;
     });
   }
 
