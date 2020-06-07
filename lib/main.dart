@@ -53,6 +53,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   BluetoothConnection connection;
 
   int _deviceState;
+  int _speed;
 
   bool isDisconnecting = false;
 
@@ -86,6 +87,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
 
     _deviceState = 0; // neutral
+    _speed = 0;
 
     // If the bluetooth of the device is not enabled,
     // then request permission to turn on bluetooth
@@ -316,7 +318,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
 //                    ),
 //                  ),
 //                ),
-                SpeedManager(),
+                SpeedManager(increaseSpeed: _increaseSpeed, decreaseSpeed: _decreaseSpeed, toggleOnOff: _toggleOnOff, isOn: _deviceState, speed: _speed,),
               ],
             ),
           ),
@@ -423,9 +425,19 @@ class _BluetoothAppState extends State<BluetoothApp> {
     }
   }
 
-  _increaseSpeed() {}
+  // decrease _speed by one and decrease device speed by one
+  _increaseSpeed() {
+    setState(() {
+      _speed += 1;
+    });
+  }
 
-  _decreaseSpeed() {}
+    // increase _speed by one and increase device speed by one
+  _decreaseSpeed() {
+    setState(() {
+      _speed += 1;
+    });
+  }
 
   _toggleOnOff() async {
     if (_deviceState == 1) {
@@ -437,6 +449,9 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
   // Method to send message,
   // for turning the Bluetooth device on
+
+  // send the signal to make the device speed equal to _speed. that way, state is saved
+  // also set _deviceState to one
   void _sendOnMessageToBluetooth() async {
     connection.output.add(utf8.encode("1" + "\r\n"));
     await connection.output.allSent;
@@ -448,6 +463,9 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
   // Method to send message,
   // for turning the Bluetooth device off
+
+  // send the signal to make the speed zero, but don't set _speed to zero.
+  // also set _deviceState to zero
   void _sendOffMessageToBluetooth() async {
     connection.output.add(utf8.encode("0" + "\r\n"));
     await connection.output.allSent;
