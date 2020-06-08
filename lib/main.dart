@@ -52,6 +52,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   BluetoothConnection connection;
 
   int _deviceState;
+  int _speed;
 
   bool isDisconnecting = false;
 
@@ -85,6 +86,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
 
     _deviceState = 0; // neutral
+    _speed = 0;
 
     enableBluetooth();
 
@@ -260,13 +262,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
                   ),
                 ],
               ),
-            ),               
+            ),
             SpeedManager(
               increaseSpeed: _increaseSpeed,
               decreaseSpeed: _decreaseSpeed,
               toggleOnOff: _toggleOnOff,
               isOn: _deviceState,
-              speed: _deviceState,
+              speed: _speed,
             ),
           ],
         ),
@@ -346,20 +348,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
     }
   }
 
-  // increase _deviceState by one and increase device speed by one
-  _increaseSpeed() {
-    setState(() {
-      _deviceState += 1;
-    });
-  }
-
-  // decrease _deviceState by one and decrease device speed by one
-  _decreaseSpeed() {
-    setState(() {
-      _deviceState -= 1;
-    });
-  }
-
   _toggleOnOff() async {
     if (_deviceState > 0) {
       _sendOffMessageToBluetooth();
@@ -370,8 +358,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
   // Method to send message,
   void _sendOnMessageToBluetooth() async {
-    connection.output.add(utf8.encode("1" + "\r\n"));
-    await connection.output.allSent;
+//    connection.output.add(utf8.encode("1" + "\r\n"));
+//    await connection.output.allSent;
     show('Operate on low speed');
     setState(() {
       _deviceState = 1;
@@ -380,55 +368,37 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
   // Method to send message,
   void _sendOffMessageToBluetooth() async {
-    connection.output.add(utf8.encode("0" + "\r\n"));
-    await connection.output.allSent;
+//    connection.output.add(utf8.encode("0" + "\r\n"));
+//    await connection.output.allSent;
     show('Off');
     setState(() {
       _deviceState = -1; // device off
     });
   }
 
-  //State messages
-  void _sendState1MessageToBluetooth() async {
-    connection.output.add(utf8.encode("1" + "\r\n"));
+  _increaseSpeed() {
+    _sendStateMessageToBluetooth(_speed + 1);
+    setState(() {
+      _speed += 1;
+    });
+  }
+
+  _decreaseSpeed() {
+    _sendStateMessageToBluetooth(_speed - 1);
+    setState(() {
+      _speed -= 1;
+    });
+  }
+
+  void _sendStateMessageToBluetooth(int number) async {
+    connection.output.add(utf8.encode("$number" + "\r\n"));
     await connection.output.allSent;
-    show('Operating on speed 1');
+    show('Operating on speed $number');
     setState(() {
       _deviceState = 1;
     });
   }
-  void _sendState2MessageToBluetooth() async {
-    connection.output.add(utf8.encode("2" + "\r\n"));
-    await connection.output.allSent;
-    show('Operating on speed 2');
-    setState(() {
-      _deviceState = 1;
-    });
-  }
-void _sendState3MessageToBluetooth() async {
-    connection.output.add(utf8.encode("3" + "\r\n"));
-    await connection.output.allSent;
-    show('Operating on speed 3');
-    setState(() {
-      _deviceState = 1;
-    });
-  }
-  void _sendState4MessageToBluetooth() async {
-    connection.output.add(utf8.encode("4" + "\r\n"));
-    await connection.output.allSent;
-    show('Operating on speed 4');
-    setState(() {
-      _deviceState = 1;
-    });
-  }
-  void _sendState5MessageToBluetooth() async {
-    connection.output.add(utf8.encode("5" + "\r\n"));
-    await connection.output.allSent;
-    show('Operating on speed 5');
-    setState(() {
-      _deviceState = 1;
-    });
-  }
+
   // Method to show a Snackbar,
   // taking message as the text
   Future show(
