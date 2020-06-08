@@ -361,7 +361,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
   void _sendOnMessageToBluetooth() async {
 //    connection.output.add(utf8.encode("1" + "\r\n"));
 //    await connection.output.allSent;
-    show('Operate on low speed');
     setState(() {
       _deviceState = 1;
     });
@@ -371,7 +370,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
   void _sendOffMessageToBluetooth() async {
 //    connection.output.add(utf8.encode("0" + "\r\n"));
 //    await connection.output.allSent;
-    show('Off');
     setState(() {
       _deviceState = -1; // device off
     });
