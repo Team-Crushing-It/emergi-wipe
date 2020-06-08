@@ -53,14 +53,11 @@ class SpeedManager extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: OnOffSwitch(
-              isOn: isOn,
-              onTap: () {
-                toggleOnOff();
-              }),
-        )
+        OnOffSwitch(
+            isOn: isOn,
+            onTap: () {
+              toggleOnOff();
+            })
       ]),
     );
   }
