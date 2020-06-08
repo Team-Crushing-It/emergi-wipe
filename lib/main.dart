@@ -9,9 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth/speed_manager.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
-import 'on_off_switch.dart';
-import 'speed_bar.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -19,17 +16,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       theme: ThemeData(
         backgroundColor: Colors.white,
         accentColor: Colors.black,
+        primaryColor: Colors.yellow,
         brightness: Brightness.light,
-        primaryColor: Colors.deepOrange,
         fontFamily: "Courier Prime",
       ),
       darkTheme: ThemeData(
         backgroundColor: Colors.grey[900],
         accentColor: Colors.white,
+        primaryColor: Colors.yellow,
         brightness: Brightness.dark,
         fontFamily: "Courier Prime",
       ),
@@ -168,113 +166,113 @@ class _BluetoothAppState extends State<BluetoothApp> {
   // Now, its time to build the UI
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text("Emer-Wipe"),
-          backgroundColor: Colors.deepPurple,
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(
-                Icons.refresh,
-                color: Colors.white,
-              ),
-              label: Text(
-                "Refresh",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              splashColor: Colors.deepPurple,
-              onPressed: () async {
-                // So, that when new devices are paired
-                // while the app is running, user can refresh
-                // the paired devices list.
-                await getPairedDevices().then((_) {
-                  show('Device list refreshed');
-                });
-              },
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("Emer-Wipe"),
+        backgroundColor: Theme.of(context).primaryColor,
+        actions: <Widget>[
+          FlatButton.icon(
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.black,
             ),
-          ],
-        ),
-        body: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Visibility(
-                visible: _isButtonUnavailable && _bluetoothState == BluetoothState.STATE_ON,
-                child: LinearProgressIndicator(
-                  backgroundColor: Colors.yellow,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                ),
+            label: Text(
+              "Refresh",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16
+              )
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            onPressed: () async {
+              // So, that when new devices are paired
+              // while the app is running, user can refresh
+              // the paired devices list.
+              await getPairedDevices().then((_) {
+                show('Device list refreshed');
+              });
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Visibility(
+              visible: _isButtonUnavailable && _bluetoothState == BluetoothState.STATE_ON,
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.yellow,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'Enable Bluetooth',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      'Enable Bluetooth',
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontSize: 16,
                       ),
                     ),
-                    Switch(
-                      value: _bluetoothState.isEnabled,
-                      onChanged: (bool value) {
-                        future() async {
-                          if (value) {
-                            await FlutterBluetoothSerial.instance.requestEnable();
-                          } else {
-                            await FlutterBluetoothSerial.instance.requestDisable();
-                          }
-
-                          await getPairedDevices();
-                          _isButtonUnavailable = false;
-
-                          if (_connected) {
-                            _disconnect();
-                          }
+                  ),
+                  Switch(
+                    value: _bluetoothState.isEnabled,
+                    onChanged: (bool value) {
+                      future() async {
+                        if (value) {
+                          await FlutterBluetoothSerial.instance.requestEnable();
+                        } else {
+                          await FlutterBluetoothSerial.instance.requestDisable();
                         }
 
-                        future().then((_) {
-                          setState(() {});
-                        });
-                      },
-                    )
-                  ],
-                ),
+                        await getPairedDevices();
+                        _isButtonUnavailable = false;
+
+                        if (_connected) {
+                          _disconnect();
+                        }
+                      }
+
+                      future().then((_) {
+                        setState(() {});
+                      });
+                    },
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Device:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Device:',
+                    style: TextStyle(
+                      fontSize: 20
                     ),
-                    DropdownButton(
-                      items: _getDeviceItems(),
-                      onChanged: (value) => setState(() => _device = value),
-                      value: _devicesList.isNotEmpty ? _device : null,
-                    ),
-                    RaisedButton(
-                      onPressed: _isButtonUnavailable ? null : _connected ? _disconnect : _connect,
-                      child: Text(_connected ? 'Disconnect' : 'Connect'),
-                    ),
-                  ],
-                ),
+                  ),
+                  DropdownButton(
+                    items: _getDeviceItems(),
+                    onChanged: (value) => setState(() => _device = value),
+                    value: _devicesList.isNotEmpty ? _device : null,
+                  ),
+                  RaisedButton(
+                    onPressed: _isButtonUnavailable ? null : _connected ? _disconnect : _connect,
+                    child: Text(_connected ? 'Disconnect' : 'Connect'),
+                  ),
+                ],
               ),
+            ),
 //                Padding(
 //                  padding: const EdgeInsets.all(16.0),
 //                  child: Card(
@@ -316,9 +314,14 @@ class _BluetoothAppState extends State<BluetoothApp> {
 //                    ),
 //                  ),
 //                ),
-              Builder(builder: (context) => SpeedManager(increaseSpeed: _increaseSpeed, decreaseSpeed: _decreaseSpeed, toggleOnOff: _toggleOnOff, isOn: _deviceState, speed: _deviceState,)),
-            ],
-          ),
+            SpeedManager(
+              increaseSpeed: _increaseSpeed,
+              decreaseSpeed: _decreaseSpeed,
+              toggleOnOff: _toggleOnOff,
+              isOn: _deviceState,
+              speed: _deviceState,
+            ),
+          ],
         ),
       ),
     );
@@ -429,7 +432,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
   }
 
-    // decrease _deviceState by one and decrease device speed by one
+  // decrease _deviceState by one and decrease device speed by one
   _decreaseSpeed() {
     setState(() {
       _deviceState -= 1;
@@ -454,7 +457,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     await connection.output.allSent;
     show('Operate on low speed');
     setState(() {
-      //_deviceState = 1;
+      _deviceState = 1;
     });
   }
 
@@ -467,7 +470,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     await connection.output.allSent;
     show('Operate on high speed');
     setState(() {
-      //_deviceState = -1; // device off
+      _deviceState = -1; // device off
     });
   }
 
