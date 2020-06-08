@@ -153,7 +153,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
   }
 
-//UI
+  //UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
