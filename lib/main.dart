@@ -86,9 +86,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
     _deviceState = 0; // neutral
 
-    // If the bluetooth of the device is not enabled,
-    // then request permission to turn on bluetooth
-    // as the app starts up
     enableBluetooth();
 
     // Listen for further state changes
@@ -139,38 +136,29 @@ class _BluetoothAppState extends State<BluetoothApp> {
     return false;
   }
 
-  // For retrieving and storing the paired devices
-  // in a list.
   Future<void> getPairedDevices() async {
     List<BluetoothDevice> devices = [];
-
-    // To get the list of paired devices
     try {
       devices = await _bluetooth.getBondedDevices();
     } on PlatformException {
       print("Error");
     }
-
-    // It is an error to call [setState] unless [mounted] is true.
     if (!mounted) {
       return;
     }
-
-    // Store the [devices] list in the [_devicesList] for accessing
-    // the list outside this class
     setState(() {
       _devicesList = devices;
     });
   }
 
-  // Now, its time to build the UI
+//UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Emer-Wipe"),
+        title: Text("Emergency Wipe"),
         backgroundColor: Theme.of(context).primaryColor,
         actions: <Widget>[
           FlatButton.icon(
@@ -179,7 +167,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
               color: Colors.black,
             ),
             label: Text(
-              "Refresh",
+              "Reload",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16
@@ -272,48 +260,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                   ),
                 ],
               ),
-            ),
-//                Padding(
-//                  padding: const EdgeInsets.all(16.0),
-//                  child: Card(
-//                    shape: RoundedRectangleBorder(
-//                      side: new BorderSide(
-//                        color: _deviceState == 0
-//                            ? colors['neutralBorderColor']
-//                            : _deviceState == 1 ? colors['onBorderColor'] : colors['offBorderColor'],
-//                        width: 3,
-//                      ),
-//                      borderRadius: BorderRadius.circular(4.0),
-//                    ),
-//                    elevation: _deviceState == 0 ? 4 : 0,
-//                    child: Padding(
-//                      padding: const EdgeInsets.all(8.0),
-//                      child: Row(
-//                        children: <Widget>[
-//                          Expanded(
-//                            child: Text(
-//                              "Emer-wipe Speed",
-//                              style: TextStyle(
-//                                fontSize: 20,
-//                                color: _deviceState == 0
-//                                    ? colors['neutralTextColor']
-//                                    : _deviceState == 1 ? colors['onTextColor'] : colors['offTextColor'],
-//                              ),
-//                            ),
-//                          ),
-//                          FlatButton(
-//                            onPressed: _connected ? _sendOnMessageToBluetooth : null,
-//                            child: Text("Low"),
-//                          ),
-//                          FlatButton(
-//                            onPressed: _connected ? _sendOffMessageToBluetooth : null,
-//                            child: Text("High"),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
-//                  ),
-//                ),
+            ),               
             SpeedManager(
               increaseSpeed: _increaseSpeed,
               decreaseSpeed: _decreaseSpeed,
@@ -382,32 +329,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
     }
   }
 
-  // void _onDataReceived(Uint8List data) {
-  //   // Allocate buffer for parsed data
-  //   int backspacesCounter = 0;
-  //   data.forEach((byte) {
-  //     if (byte == 8 || byte == 127) {
-  //       backspacesCounter++;
-  //     }
-  //   });
-  //   Uint8List buffer = Uint8List(data.length - backspacesCounter);
-  //   int bufferIndex = buffer.length;
-
-  //   // Apply backspace control character
-  //   backspacesCounter = 0;
-  //   for (int i = data.length - 1; i >= 0; i--) {
-  //     if (data[i] == 8 || data[i] == 127) {
-  //       backspacesCounter++;
-  //     } else {
-  //       if (backspacesCounter > 0) {
-  //         backspacesCounter--;
-  //       } else {
-  //         buffer[--bufferIndex] = data[i];
-  //       }
-  //     }
-  //   }
-  // }
-
   // Method to disconnect bluetooth
   void _disconnect() async {
     setState(() {
@@ -448,10 +369,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
   }
 
   // Method to send message,
-  // for turning the Bluetooth device on
-
-  // send the signal to make the device speed equal to _deviceState. that way, state is saved
-  // also set _deviceState to one
   void _sendOnMessageToBluetooth() async {
     connection.output.add(utf8.encode("1" + "\r\n"));
     await connection.output.allSent;
@@ -462,18 +379,56 @@ class _BluetoothAppState extends State<BluetoothApp> {
   }
 
   // Method to send message,
-  // for turning the Bluetooth device off
-
-  // send the signal to make the speed zero, but don't set _deviceState to zero.
   void _sendOffMessageToBluetooth() async {
     connection.output.add(utf8.encode("0" + "\r\n"));
     await connection.output.allSent;
-    show('Operate on high speed');
+    show('Off');
     setState(() {
       _deviceState = -1; // device off
     });
   }
 
+  //State messages
+  void _sendState1MessageToBluetooth() async {
+    connection.output.add(utf8.encode("1" + "\r\n"));
+    await connection.output.allSent;
+    show('Operating on speed 1');
+    setState(() {
+      _deviceState = 1;
+    });
+  }
+  void _sendState2MessageToBluetooth() async {
+    connection.output.add(utf8.encode("2" + "\r\n"));
+    await connection.output.allSent;
+    show('Operating on speed 2');
+    setState(() {
+      _deviceState = 1;
+    });
+  }
+void _sendState3MessageToBluetooth() async {
+    connection.output.add(utf8.encode("3" + "\r\n"));
+    await connection.output.allSent;
+    show('Operating on speed 3');
+    setState(() {
+      _deviceState = 1;
+    });
+  }
+  void _sendState4MessageToBluetooth() async {
+    connection.output.add(utf8.encode("4" + "\r\n"));
+    await connection.output.allSent;
+    show('Operating on speed 4');
+    setState(() {
+      _deviceState = 1;
+    });
+  }
+  void _sendState5MessageToBluetooth() async {
+    connection.output.add(utf8.encode("5" + "\r\n"));
+    await connection.output.allSent;
+    show('Operating on speed 5');
+    setState(() {
+      _deviceState = 1;
+    });
+  }
   // Method to show a Snackbar,
   // taking message as the text
   Future show(
