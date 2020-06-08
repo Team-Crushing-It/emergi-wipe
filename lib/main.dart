@@ -258,7 +258,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
                   ),
                   RaisedButton(
                     onPressed: _isButtonUnavailable ? null : _connected ? _disconnect : _connect,
-                    child: Text(_connected ? 'Disconnect' : 'Connect'),
+                    child: Text(_connected ? 'Disconnect' : 'Connect', style: TextStyle(color: Colors.black)),
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),

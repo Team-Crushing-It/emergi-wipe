@@ -23,10 +23,8 @@ class SpeedManager extends StatelessWidget {
         onVerticalDragEnd: (details) {
           if (details.velocity.pixelsPerSecond.dy > 0 && speed > 0) {
             decreaseSpeed();
-            print("swiped down");
           } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6) {
             increaseSpeed();
-            print("swiped up");
           }
         },
         child: IntrinsicHeight(
@@ -57,7 +55,6 @@ class SpeedManager extends StatelessWidget {
             isOn: isOn > 0 ? true : false,
             onTap: () {
               toggleOnOff();
-              print("clicked onoff");
             }),
       )
     ]);
