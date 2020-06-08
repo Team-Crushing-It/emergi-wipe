@@ -8,7 +8,7 @@ class SpeedManager extends StatelessWidget {
   final Function decreaseSpeed;
   final Function toggleOnOff;
   final int speed;
-  final int isOn;
+  final bool isOn;
 
   const SpeedManager({this.increaseSpeed, this.decreaseSpeed, this.toggleOnOff, this.speed, this.isOn});
   @override
@@ -44,15 +44,15 @@ class SpeedManager extends StatelessWidget {
                   SpeedBar(value: 2, currentSpeed: speed, length: 80),
                   SpeedBar(value: 1, currentSpeed: speed, length: 30),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(6.0),
         child: OnOffSwitch(
-            isOn: isOn > 0 ? true : false,
+            isOn: isOn,
             onTap: () {
               toggleOnOff();
             }),

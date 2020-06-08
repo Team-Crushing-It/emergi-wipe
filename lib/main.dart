@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       theme: ThemeData(
         backgroundColor: Colors.white,
         accentColor: Colors.black,
@@ -52,7 +52,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   BluetoothConnection connection;
 
   int _deviceState;
-  int _speed;
+  bool _isOn;
 
   bool isDisconnecting = false;
 
@@ -85,8 +85,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
       });
     });
 
-    _deviceState = 0; // neutral
-    _speed = 0;
+    _deviceState = 0; // off
+    _isOn = false;
 
     enableBluetooth();
 
@@ -168,13 +168,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
               Icons.refresh,
               color: Colors.black,
             ),
-            label: Text(
-              "Reload",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16
-              )
-            ),
+            label: Text("Reload", style: TextStyle(color: Colors.black, fontSize: 16)),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -247,9 +241,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 children: <Widget>[
                   Text(
                     'Device:',
-                    style: TextStyle(
-                      fontSize: 20
-                    ),
+                    style: TextStyle(fontSize: 20),
                   ),
                   DropdownButton(
                     items: _getDeviceItems(),
@@ -268,8 +260,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
               increaseSpeed: _increaseSpeed,
               decreaseSpeed: _decreaseSpeed,
               toggleOnOff: _toggleOnOff,
-              isOn: _deviceState,
-              speed: _speed,
+              isOn: _isOn,
+              speed: _deviceState,
             ),
           ],
         ),
@@ -350,7 +342,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   }
 
   _toggleOnOff() async {
-    if (_deviceState > 0) {
+    if (_isOn) {
       _sendOffMessageToBluetooth();
     } else {
       _sendOnMessageToBluetooth();
@@ -359,10 +351,11 @@ class _BluetoothAppState extends State<BluetoothApp> {
 
   // Method to send message,
   void _sendOnMessageToBluetooth() async {
-//    connection.output.add(utf8.encode("1" + "\r\n"));
+//    connection.output.add(utf8.encode("$_deviceState" + "\r\n"));
 //    await connection.output.allSent;
+    show("operating on $_deviceState");
     setState(() {
-      _deviceState = 1;
+      _isOn = true;
     });
   }
 
@@ -370,31 +363,34 @@ class _BluetoothAppState extends State<BluetoothApp> {
   void _sendOffMessageToBluetooth() async {
 //    connection.output.add(utf8.encode("0" + "\r\n"));
 //    await connection.output.allSent;
+    show("operating on 0");
     setState(() {
-      _deviceState = -1; // device off
+      _isOn = false;
     });
   }
 
   _increaseSpeed() {
-    _sendStateMessageToBluetooth(_speed + 1);
-    setState(() {
-      _speed += 1;
-    });
+    if(_isOn) {
+      _sendStateMessageToBluetooth(_deviceState + 1);
+    } else {
+      show("cannot change speed while off");
+    }
   }
 
   _decreaseSpeed() {
-    _sendStateMessageToBluetooth(_speed - 1);
-    setState(() {
-      _speed -= 1;
-    });
+    if(_isOn) {
+      _sendStateMessageToBluetooth(_deviceState - 1);
+    } else {
+      show("cannot change speed while off");
+    }
   }
 
   void _sendStateMessageToBluetooth(int number) async {
-    connection.output.add(utf8.encode("$number" + "\r\n"));
-    await connection.output.allSent;
+//    connection.output.add(utf8.encode("$number" + "\r\n"));
+//    await connection.output.allSent;
     show('Operating on speed $number');
     setState(() {
-      _deviceState = 1;
+      _deviceState = number;
     });
   }
 
