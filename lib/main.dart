@@ -200,8 +200,10 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
               ),
             ),
+            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 32.0),
+              
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -210,7 +212,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                       'Enable Bluetooth',
                       style: TextStyle(
                         color: Theme.of(context).accentColor,
-                        fontSize: 16,
+                        fontSize: 17,
                       ),
                     ),
                   ),
@@ -239,9 +241,12 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 ],
               ),
             ),
+            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 3.0),
+              
+              child: 
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
@@ -261,6 +266,27 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 ],
               ),
             ),
+            Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        
+                        SizedBox(height: 15),
+                        RaisedButton(
+                          elevation: 2,
+                          child: Text("Bluetooth Settings"),
+                          onPressed: () {
+                            FlutterBluetoothSerial.instance.openSettings();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
           ],
         ),
       ),
