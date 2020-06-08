@@ -1,1 +1,2 @@
-# Flutter app for Emergency Windshield Wiper
+
+![](/lib/assets/EmerWipeLogo.png)
