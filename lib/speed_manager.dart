@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth/widgets/emergi_wipe_logo.dart';
 import 'package:flutter_bluetooth/widgets/on_off_switch.dart';
 import 'package:flutter_bluetooth/widgets/speed_bar.dart';
+import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
 
 class SpeedManager extends StatelessWidget {
   final Function increaseSpeed;
@@ -36,19 +37,15 @@ class SpeedManager extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [Icon(Icons.arrow_upward), Text("Swipe", style: TextStyle(fontSize: 18)), Icon(Icons.arrow_downward)],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Icon(Icons.arrow_upward), Text("Swipe", style: TextStyle(fontSize: 18)), Icon(Icons.arrow_downward)],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      SpeedBar(value: 6, currentSpeed: speed, length: 280),
-                      SpeedBar(value: 5, currentSpeed: speed, length: 230),
-                      SpeedBar(value: 4, currentSpeed: speed, length: 180),
-                      SpeedBar(value: 3, currentSpeed: speed, length: 130),
-                      SpeedBar(value: 2, currentSpeed: speed, length: 80),
-                      SpeedBar(value: 1, currentSpeed: speed, length: 30),
-                    ],
+                  Expanded(
+                    flex: 4,
+                    child: SpeedPyramid(speed: speed),
                   ),
                   Spacer(),
                 ],
@@ -68,3 +65,14 @@ class SpeedManager extends StatelessWidget {
     );
   }
 }
+
+class DebugBorder extends StatelessWidget {
+  final Widget child;
+
+  const DebugBorder({this.child});
+  @override
+  Widget build(BuildContext context) {
+    return Container(decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)), child: child);
+  }
+}
+

@@ -451,13 +451,3 @@ class _BluetoothAppState extends State<BluetoothApp> {
     );
   }
 }
-
-class DebugBorder extends StatelessWidget {
-  final Widget child;
-
-  const DebugBorder({this.child});
-  @override
-  Widget build(BuildContext context) {
-    return Container(decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)), child: child);
-  }
-}
