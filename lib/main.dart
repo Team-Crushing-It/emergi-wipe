@@ -156,7 +156,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
   //UI
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isConnected ? Scaffold(body: SpeedManager(
+      increaseSpeed: _increaseSpeed,
+      decreaseSpeed: _decreaseSpeed,
+      toggleOnOff: _toggleOnOff,
+      isOn: _isOn,
+      speed: _deviceState,
+    )) : Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
       appBar: AppBar(
@@ -225,7 +231,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           _disconnect();
                         }
                       }
-
                       future().then((_) {
                         setState(() {});
                       });
@@ -255,13 +260,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
                   ),
                 ],
               ),
-            ),
-            SpeedManager(
-              increaseSpeed: _increaseSpeed,
-              decreaseSpeed: _decreaseSpeed,
-              toggleOnOff: _toggleOnOff,
-              isOn: _isOn,
-              speed: _deviceState,
             ),
           ],
         ),
