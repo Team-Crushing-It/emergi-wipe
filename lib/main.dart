@@ -151,7 +151,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     });
   }
 
-//UI
+  //UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -397,6 +397,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
       _deviceState = 1;
     });
   }
+
   void _sendState2MessageToBluetooth() async {
     connection.output.add(utf8.encode("2" + "\r\n"));
     await connection.output.allSent;

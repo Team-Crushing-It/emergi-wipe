@@ -1,0 +1,56 @@
+//Sample code for what I think the Arduino connection would look like
+
+// Variable for storing incoming value
+char Incoming_value = 0;
+
+void setup()
+{
+  // Sets the data rate in bits per second (baud) 
+  // for serial data transmission
+  Serial.begin(9600);
+  
+  // Sets digital pin 8 as output pin
+  pinMode(8, OUTPUT);
+  
+  // Initializes the pin 8 to LOW (i.e., OFF)
+  digitalWrite(8, LOW);
+}
+
+void loop()
+{
+  if (Serial.available() > 0)
+  {
+    // Read the incoming data and store it in the variable
+    Incoming_value = Serial.read();
+    
+    // Print value of Incoming_value in Serial monitor
+    Serial.print(Incoming_value);
+    Serial.print("\n");
+
+
+    if (Incoming_value == '0')
+      digitalWrite(8, LOW); // If value is 0, turn OFF the device
+
+    else if (Incoming_value == '1')
+      //Something to set the value to speed
+  }
+  else if (Incoming_value == '2')
+      //Something to set the value to speed
+  }
+  else if (Incoming_value == '3')
+      //Something to set the value to speed
+  }
+  else if (Incoming_value == '4')
+      //Something to set the value to speed
+  }
+  else if (Incoming_value == '5')
+      //Something to set the value to speed
+  }
+  else if (Incoming_value == '6')
+      //Something to set the value to speed
+  }
+  
+  // Adding a delay before running the loop again
+  delay(1);
+  
+}
