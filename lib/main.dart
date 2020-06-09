@@ -213,6 +213,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           future() async {
                             if (value) {
                               await FlutterBluetoothSerial.instance.requestEnable();
+
                             } else {
                               await FlutterBluetoothSerial.instance.requestDisable();
                             }
