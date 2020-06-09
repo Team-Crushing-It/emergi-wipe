@@ -7,6 +7,7 @@ environment:
 
 dependencies:
   flutter_blue: ^0.7.2
+  
   flutter:
     sdk: flutter
 
