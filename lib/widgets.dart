@@ -94,7 +94,7 @@ class ScanResultTile extends StatelessWidget {
         child: Text('CONNECT'),
         color: Colors.black,
         textColor: Colors.white,
-        onPressed: (result.advertisementData.connectable) ? onTap : null,
+        onPressed: onTap,
       ),
       children: <Widget>[
         _buildAdvRow(
@@ -300,3 +300,4 @@ class AdapterStateTile extends StatelessWidget {
     );
   }
 }
+

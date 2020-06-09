@@ -7,8 +7,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_blue_example/addon.dart';
-
+import 'package:flutter_blue_example/widgets.dart';
 
 void main() {
   runApp(FlutterBlueApp());
@@ -65,13 +64,12 @@ class BluetoothOffScreen extends StatelessWidget {
   }
 }
 
-
 class FindDevicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emergency Wipe'),
+        title: Text('Find Devices'),
       ),
       body: RefreshIndicator(
         onRefresh: () =>
@@ -119,7 +117,7 @@ class FindDevicesScreen extends StatelessWidget {
                           result: r,
                           onTap: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            r.device.connect(autoConnect: false);
+                            r.device.connect();
                             return DeviceScreen(device: r.device);
                           })),
                         ),
@@ -221,7 +219,7 @@ class DeviceScreen extends StatelessWidget {
                   text = 'DISCONNECT';
                   break;
                 case BluetoothDeviceState.disconnected:
-                  onPressed = () => device.connect(autoConnect: false);
+                  onPressed = () => device.connect();
                   text = 'CONNECT';
                   break;
                 default:
@@ -254,6 +252,7 @@ class DeviceScreen extends StatelessWidget {
                     : Icon(Icons.bluetooth_disabled),
                 title: Text(
                     'Device is ${snapshot.data.toString().split('.')[1]}.'),
+                subtitle: Text('${device.id}'),
                 trailing: StreamBuilder<bool>(
                   stream: device.isDiscoveringServices,
                   initialData: false,
@@ -279,8 +278,18 @@ class DeviceScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Text("This is where the swipey ui thing will go if the device is connected."),
-              
+            StreamBuilder<int>(
+              stream: device.mtu,
+              initialData: 0,
+              builder: (c, snapshot) => ListTile(
+                title: Text('MTU Size'),
+                subtitle: Text('${snapshot.data} bytes'),
+                trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => device.requestMtu(223),
+                ),
+              ),
+            ),
             StreamBuilder<List<BluetoothService>>(
               stream: device.services,
               initialData: [],
