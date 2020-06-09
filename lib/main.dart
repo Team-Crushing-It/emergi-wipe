@@ -1,6 +1,4 @@
-// Copyright 2017, Paul DeMarco.
-// All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
+// TCi Summer 2020
 
 import 'dart:async';
 import 'dart:math';
@@ -24,6 +22,7 @@ class FlutterBlueApp extends StatelessWidget {
           builder: (c, snapshot) {
             final state = snapshot.data;
             if (state == BluetoothState.on) {
+              FlutterBlue.instance.startScan(timeout: Duration(seconds: 4));
               return FindDevicesScreen();
             }
             return BluetoothOffScreen(state: state);
@@ -63,7 +62,7 @@ class BluetoothOffScreen extends StatelessWidget {
     );
   }
 }
-
+//==========================================================================================================
 class FindDevicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -71,6 +70,7 @@ class FindDevicesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Find Devices'),
       ),
+      
       body: RefreshIndicator(
         onRefresh: () =>
             FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
@@ -165,7 +165,7 @@ class DeviceScreen extends StatelessWidget {
       math.nextInt(255)
     ];
   }
-
+//==========================================================================================================
   List<Widget> _buildServiceTiles(List<BluetoothService> services) {
     return services
         .map(
@@ -200,7 +200,7 @@ class DeviceScreen extends StatelessWidget {
         )
         .toList();
   }
-
+//==========================================================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,6 +240,8 @@ class DeviceScreen extends StatelessWidget {
           )
         ],
       ),
+
+      //==========================================================================================================
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -278,6 +280,7 @@ class DeviceScreen extends StatelessWidget {
                 ),
               ),
             ),
+            //==========================================================================================================
             StreamBuilder<int>(
               stream: device.mtu,
               initialData: 0,
@@ -290,6 +293,7 @@ class DeviceScreen extends StatelessWidget {
                 ),
               ),
             ),
+            //==========================================================================================================
             StreamBuilder<List<BluetoothService>>(
               stream: device.services,
               initialData: [],
