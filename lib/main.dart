@@ -159,9 +159,12 @@ class DeviceScreen extends StatelessWidget {
   final BluetoothDevice device;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   
 =======
+=======
+>>>>>>> parent of 3b0d791... Cleared the way for UI
   List<int> _getRandomBytes() {
     final math = Random();
     return [
@@ -206,17 +209,23 @@ class DeviceScreen extends StatelessWidget {
         )
         .toList();
   }
+<<<<<<< HEAD
+>>>>>>> parent of 3b0d791... Cleared the way for UI
+=======
 >>>>>>> parent of 3b0d791... Cleared the way for UI
 //==========================================================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 <<<<<<< HEAD
+<<<<<<< HEAD
 
       
        //insert UI here !@#!#@#%$&$&%^*(*^&%$#@!$%^&*(()^&*%$#@@#~!@#$%^&(*(&*&#@#!@$^#$^&))))
 
 =======
+=======
+>>>>>>> parent of 3b0d791... Cleared the way for UI
       appBar: AppBar(
         title: Text(device.name),
         actions: <Widget>[
@@ -319,6 +328,9 @@ class DeviceScreen extends StatelessWidget {
           ],
         ),
       ),
+<<<<<<< HEAD
+>>>>>>> parent of 3b0d791... Cleared the way for UI
+=======
 >>>>>>> parent of 3b0d791... Cleared the way for UI
     );
   }
