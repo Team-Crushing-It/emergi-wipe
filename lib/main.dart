@@ -300,11 +300,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 centerTitle: true,
               ),
               body: SpeedManager(
-                increaseSpeed: _increaseSpeed,
-                decreaseSpeed: _decreaseSpeed,
-                toggleOnOff: _toggleOnOff,
-                isOn: _isOn,
-                speed: _deviceState,
+                setSpeed: _sendStateMessageToBluetooth,
               ))
         ]);
   }

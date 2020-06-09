@@ -5,14 +5,19 @@ import 'package:flutter_bluetooth/widgets/on_off_switch.dart';
 import 'package:flutter_bluetooth/widgets/speed_bar.dart';
 import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
 
-class SpeedManager extends StatelessWidget {
-  final Function increaseSpeed;
-  final Function decreaseSpeed;
-  final Function toggleOnOff;
-  final int speed;
-  final bool isOn;
+class SpeedManager extends StatefulWidget {
+  final Function setSpeed;
 
-  const SpeedManager({this.increaseSpeed, this.decreaseSpeed, this.toggleOnOff, this.speed, this.isOn});
+  const SpeedManager({this.setSpeed});
+
+  @override
+  _SpeedManagerState createState() => _SpeedManagerState();
+}
+
+class _SpeedManagerState extends State<SpeedManager> {
+  int speed = 0;
+  bool isOn = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,9 +31,15 @@ class SpeedManager extends StatelessWidget {
           behavior: HitTestBehavior.translucent,
           onVerticalDragEnd: (details) {
             if (details.velocity.pixelsPerSecond.dy > 0 && speed > 0) {
-              decreaseSpeed();
+              widget.setSpeed(speed - 1);
+              setState(() {
+                speed -= 1;
+              });
             } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6) {
-              increaseSpeed();
+              widget.setSpeed(speed + 1);
+              setState(() {
+                speed += 1;
+              });
             }
           },
           child: IntrinsicHeight(
@@ -56,7 +67,14 @@ class SpeedManager extends StatelessWidget {
         OnOffSwitch(
             isOn: isOn,
             onTap: () {
-              toggleOnOff();
+              if(isOn) {
+                widget.setSpeed(0);
+              } else {
+                widget.setSpeed(speed);
+              }
+              setState(() {
+                isOn = !isOn;
+              });
             })
       ]),
     );
