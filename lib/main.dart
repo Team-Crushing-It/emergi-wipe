@@ -279,6 +279,7 @@ class DeviceScreen extends StatelessWidget {
                 ),
               ),
             ),
+            Text("This is where the swipey ui thing will go if the device is connected."),
               
             StreamBuilder<List<BluetoothService>>(
               stream: device.services,
