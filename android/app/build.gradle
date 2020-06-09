@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         applicationId "com.pauldemarco.flutter_blue_example"
-        minSdkVersion 20
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
