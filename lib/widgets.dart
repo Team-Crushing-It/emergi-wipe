@@ -94,7 +94,7 @@ class ScanResultTile extends StatelessWidget {
         child: Text('CONNECT'),
         color: Colors.black,
         textColor: Colors.white,
-        onPressed: (result.advertisementData.connectable) ? onTap : null,
+        onPressed: onTap,
       ),
       children: <Widget>[
         _buildAdvRow(
@@ -197,26 +197,13 @@ class CharacteristicTile extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.file_download,
-                  color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-                ),
-                onPressed: onReadPressed,
-              ),
+              
               IconButton(
                 icon: Icon(Icons.file_upload,
                     color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
                 onPressed: onWritePressed,
               ),
-              IconButton(
-                icon: Icon(
-                    characteristic.isNotifying
-                        ? Icons.sync_disabled
-                        : Icons.sync,
-                    color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
-                onPressed: onNotificationPressed,
-              )
+              
             ],
           ),
           children: descriptorTiles,
@@ -300,3 +287,4 @@ class AdapterStateTile extends StatelessWidget {
     );
   }
 }
+
