@@ -45,7 +45,7 @@ class SpeedManager extends StatelessWidget {
                   ),
                   Expanded(
                     flex: 4,
-                    child: SpeedPyramid(speed: speed),
+                    child: SpeedPyramid(speed: speed, isOn: isOn),
                   ),
                   Spacer(),
                 ],

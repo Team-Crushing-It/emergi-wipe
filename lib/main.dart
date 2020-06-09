@@ -100,7 +100,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
     _deviceState = 0; // off
     _isOn = false;
     _pageController = PageController(
-      initialPage: 1
+      initialPage: 0
     );
 
     enableBluetooth();
