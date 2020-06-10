@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth/widgets/emergi_wipe_logo.dart';
-import 'package:flutter_bluetooth/widgets/on_off_switch.dart';
-import 'package:flutter_bluetooth/widgets/speed_bar.dart';
-import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
+import 'widgets/emergi_wipe_logo.dart';
+import 'widgets/on_off_switch.dart';
+import 'widgets/speed_pyramid.dart';
 
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 import 'globals.dart' as globals;
 
 //import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
-
+//==========================================================================================================
+// Screen that user gestures on to change speed of device
+//==========================================================================================================
 class SpeedManager extends StatefulWidget {
   
   final BluetoothDevice device;
@@ -36,21 +37,23 @@ class _SpeedManagerState extends State<SpeedManager> {
           padding: const EdgeInsets.all(8.0),
           child: EmergiWipeLogo(),
         ),
+        // User can swipe anywhere on the middle portion of the screen to change speed
+        // Does not allow swiping when off
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onVerticalDragEnd: (details) {
-            if (details.velocity.pixelsPerSecond.dy > 0 && speed > 1 && isOn) {
-             // widget.setSpeed(speed - 1);
-              sendChar(speed-1);
-              setState(() {
-                speed -= 1;
-              });
-            } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6 && isOn) {
-            //  widget.setSpeed(speed + 1);
-              sendChar(speed+1);
-              setState(() {
-                speed += 1;
-              });
+            if(isOn) {
+              if (details.velocity.pixelsPerSecond.dy > 0 && speed > 1) {
+                sendChar(speed - 1);
+                setState(() {
+                  speed -= 1;
+                });
+              } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6) {
+                sendChar(speed + 1);
+                setState(() {
+                  speed += 1;
+                });
+              }
             }
           },
           child: IntrinsicHeight(
@@ -89,15 +92,5 @@ class _SpeedManagerState extends State<SpeedManager> {
             })
       ]),
     );
-  }
-}
-
-class DebugBorder extends StatelessWidget {
-  final Widget child;
-
-  const DebugBorder({this.child});
-  @override
-  Widget build(BuildContext context) {
-    return Container(decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)), child: child);
   }
 }

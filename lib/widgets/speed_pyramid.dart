@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'speed_bar.dart';
 
+//==========================================================================================================
+// An inverted pyramid that visually represents the current speed
+//==========================================================================================================
 class SpeedPyramid extends StatelessWidget {
   final int speed;
   final bool isOn;
@@ -9,6 +12,7 @@ class SpeedPyramid extends StatelessWidget {
   const SpeedPyramid({this.speed, this.isOn});
   @override
   Widget build(BuildContext context) {
+    // Uses padding to determine SpeedBar size for responsiveness
     return Column(
       children: [
         SpeedBar(value: 6, currentSpeed: speed, isOn: isOn),
