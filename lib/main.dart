@@ -99,8 +99,10 @@ class FindDevicesScreen extends StatelessWidget {
                                     child: Text('OPEN'),
                                     onPressed: () => Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                SpeedManager(device: d))),
+                                            builder: (context) => Scaffold( 
+                                              body: SpeedManager(device: d)))
+                                            )
+                                                
                                   );
                                 }
                                 return Text(snapshot.data.toString());
@@ -121,7 +123,7 @@ class FindDevicesScreen extends StatelessWidget {
                           onTap: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             r.device.connect();
-                            return SpeedManager(device: r.device);
+                            return Scaffold( body: SpeedManager(device: r.device));
                           })),
                         ),
                       )
