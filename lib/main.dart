@@ -9,7 +9,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_bluetooth/widgets.dart';
 import 'package:flutter_bluetooth/speed_manager.dart';
 import 'package:flutter/cupertino.dart';
-import 'globals.dart' as globals;
 
 void main() {
   runApp(FlutterBlueApp());
@@ -157,7 +156,6 @@ class FindDevicesScreen extends StatelessWidget {
                           onTap: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             r.device.connect();
-                            globals.gdevice = r.device; //Sends the device key to the global device variable
                             return Scaffold( body: SpeedManager(device: r.device));
                           })),
                         ),
