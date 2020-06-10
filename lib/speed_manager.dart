@@ -79,9 +79,9 @@ class _SpeedManagerState extends State<SpeedManager> {
             isOn: isOn,
             onTap: () {
               if(isOn) {
-             //   widget.setSpeed(0);
+               sendChar(0);
               } else {
-             //   widget.setSpeed(speed);
+                sendChar(speed);
               }
               setState(() {
                 isOn = !isOn;

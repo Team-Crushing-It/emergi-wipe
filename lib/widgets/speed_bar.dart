@@ -12,6 +12,7 @@ class SpeedBar extends StatelessWidget {
       margin: EdgeInsets.all(10),
       height: 25,
       decoration: BoxDecoration(
+        //Could you write out this logic here? This nested if statement is pretty hard to read and understand
         color: isOn ? value <= currentSpeed ? Colors.yellow : Colors.grey : value <= currentSpeed ? Color(0xFF605816) : Color(0xFF3B3B3B),
         borderRadius: BorderRadius.circular(15)
       ),
