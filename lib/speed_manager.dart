@@ -4,7 +4,7 @@ import 'package:flutter_bluetooth/widgets/emergi_wipe_logo.dart';
 import 'package:flutter_bluetooth/widgets/on_off_switch.dart';
 import 'package:flutter_bluetooth/widgets/speed_bar.dart';
 import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
-
+import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 import 'globals.dart' as globals;
@@ -16,7 +16,6 @@ class SpeedManager extends StatefulWidget {
   final BluetoothDevice device;
 
   const SpeedManager({Key key, this.device} ) : super(key: key);
-
   @override
   _SpeedManagerState createState() => _SpeedManagerState();
   
@@ -25,7 +24,13 @@ class SpeedManager extends StatefulWidget {
 class _SpeedManagerState extends State<SpeedManager> {
   int speed = 0;
   bool isOn = false;
-
+  @override
+    void initState(){
+      print("used once");
+      findCharacteristic();
+}
+    
+    
   @override
   Widget build(BuildContext context) {
 
@@ -100,4 +105,27 @@ class DebugBorder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)), child: child);
   }
+}
+
+void sendChar(int i) async{
+    print(i);
+    String stringValue = i.toString();
+    globals.gC.write(utf8.encode(stringValue), withoutResponse: true);
+}
+
+
+void findCharacteristic() async{
+    final BluetoothDevice device=globals.gdevice;
+
+    List<BluetoothService> services = await device.discoverServices();
+    for(BluetoothService service in services) {
+      if (service.uuid.toString() == "0000dfb0-0000-1000-8000-00805f9b34fb"){
+        var characteristics = service.characteristics;
+        for(BluetoothCharacteristic c in characteristics) {
+          if (c.uuid.toString() == "0000dfb1-0000-1000-8000-00805f9b34fb") {
+            globals.gC=c;
+          }
+      }
+    }
+}
 }
