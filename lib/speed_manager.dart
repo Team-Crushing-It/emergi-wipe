@@ -6,10 +6,7 @@ import 'package:flutter_bluetooth/widgets/speed_bar.dart';
 import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
 import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 import 'globals.dart' as globals;
-
-//import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 
 class SpeedManager extends StatefulWidget {
   
@@ -112,7 +109,6 @@ void sendChar(int i) async{
     String stringValue = i.toString();
     globals.gC.write(utf8.encode(stringValue), withoutResponse: true);
 }
-
 
 void findCharacteristic() async{
     final BluetoothDevice device=globals.gdevice;

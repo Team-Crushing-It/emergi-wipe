@@ -7,7 +7,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 import 'package:flutter_bluetooth/widgets.dart';
 import 'package:flutter_bluetooth/speed_manager.dart';
-import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'globals.dart' as globals;
