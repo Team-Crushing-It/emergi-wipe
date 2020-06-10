@@ -7,6 +7,7 @@ import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
 
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
+import 'globals.dart' as globals;
 
 //import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 
@@ -18,6 +19,7 @@ class SpeedManager extends StatefulWidget {
 
   @override
   _SpeedManagerState createState() => _SpeedManagerState();
+  
 }
 
 class _SpeedManagerState extends State<SpeedManager> {
@@ -26,6 +28,7 @@ class _SpeedManagerState extends State<SpeedManager> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       color: Theme.of(context).backgroundColor,
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
