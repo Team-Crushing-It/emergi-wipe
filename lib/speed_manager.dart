@@ -4,12 +4,17 @@ import 'package:flutter_bluetooth/widgets/emergi_wipe_logo.dart';
 import 'package:flutter_bluetooth/widgets/on_off_switch.dart';
 import 'package:flutter_bluetooth/widgets/speed_bar.dart';
 import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
+
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
+
 //import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 
 class SpeedManager extends StatefulWidget {
-  final Function setSpeed;
+  
+  final BluetoothDevice device;
 
-  const SpeedManager({this.setSpeed});
+  const SpeedManager({Key key, this.device} ) : super(key: key);
 
   @override
   _SpeedManagerState createState() => _SpeedManagerState();
@@ -31,15 +36,15 @@ class _SpeedManagerState extends State<SpeedManager> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onVerticalDragEnd: (details) {
-            if (details.velocity.pixelsPerSecond.dy > 0 && speed > 0) {
-              widget.setSpeed(speed - 1);
-              //sendChar(speed-1);
+            if (details.velocity.pixelsPerSecond.dy > 0 && speed > 1) {
+             // widget.setSpeed(speed - 1);
+              sendChar(speed-1);
               setState(() {
                 speed -= 1;
               });
             } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6) {
-              widget.setSpeed(speed + 1);
-              //sendChar(speed+1);
+            //  widget.setSpeed(speed + 1);
+              sendChar(speed+1);
               setState(() {
                 speed += 1;
               });
@@ -71,9 +76,9 @@ class _SpeedManagerState extends State<SpeedManager> {
             isOn: isOn,
             onTap: () {
               if(isOn) {
-                widget.setSpeed(0);
+             //   widget.setSpeed(0);
               } else {
-                widget.setSpeed(speed);
+             //   widget.setSpeed(speed);
               }
               setState(() {
                 isOn = !isOn;
@@ -93,4 +98,3 @@ class DebugBorder extends StatelessWidget {
     return Container(decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 3)), child: child);
   }
 }
-
