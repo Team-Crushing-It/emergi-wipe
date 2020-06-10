@@ -248,13 +248,13 @@
       "languageVersion": "2.0"
     },
     {
-      "name": "flutter_blue_example",
+      "name": "flutter_bluetooth",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-06-10T13:32:31.869706Z",
+  "generated": "2020-06-10T13:42:11.461035Z",
   "generator": "pub",
   "generatorVersion": "2.9.0-8.2.beta"
 }

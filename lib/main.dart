@@ -6,7 +6,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_blue_example/widgets.dart';
+
+import 'package:flutter_bluetooth/widgets.dart';
+
 
 void main() {
   runApp(FlutterBlueApp());

@@ -1,0 +1,4 @@
+#Wed Jun 10 09:43:43 EDT 2020
+base.0=/Users/gene/Documents/dev/code/emergency-wipe/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
