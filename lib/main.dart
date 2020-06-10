@@ -18,6 +18,31 @@ class FlutterBlueApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: ThemeMode.system,
+      theme: ThemeData(
+        backgroundColor: Colors.white,
+        accentColor: Colors.black,
+        primaryColor: Colors.yellow,
+        brightness: Brightness.light,
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        fontFamily: "Courier Prime",
+      ),
+      darkTheme: ThemeData(
+        backgroundColor: Colors.grey[900],
+        accentColor: Colors.white,
+        primaryColor: Colors.yellow,
+        brightness: Brightness.dark,
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        fontFamily: "Courier Prime",
+      ),
       color: Colors.lightBlue,
       home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
