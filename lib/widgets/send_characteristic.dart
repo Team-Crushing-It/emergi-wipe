@@ -1,14 +1,11 @@
 
-import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_bluetooth/main.dart';
 import 'dart:convert';
 import 'package:flutter_bluetooth/globals.dart' as globals;
 
 void sendChar(int i) async{
     print(i);
     String stringValue = i.toString();
-  globals.isLoggedIn = true;
 
     final BluetoothDevice device=globals.gdevice;
 
