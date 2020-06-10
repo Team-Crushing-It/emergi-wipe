@@ -21,6 +21,31 @@ class FlutterBlueApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: ThemeMode.system,
+      theme: ThemeData(
+        backgroundColor: Colors.white,
+        accentColor: Colors.black,
+        primaryColor: Colors.yellow,
+        brightness: Brightness.light,
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        fontFamily: "Courier Prime",
+      ),
+      darkTheme: ThemeData(
+        backgroundColor: Colors.grey[900],
+        accentColor: Colors.white,
+        primaryColor: Colors.yellow,
+        brightness: Brightness.dark,
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        fontFamily: "Courier Prime",
+      ),
       color: Colors.lightBlue,
       home: StreamBuilder<BluetoothState>(
           stream: FlutterBlue.instance.state,
@@ -106,8 +131,10 @@ class FindDevicesScreen extends StatelessWidget {
                                     child: Text('OPEN'),
                                     onPressed: () => Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                SpeedManager(device: d))),
+                                            builder: (context) => Scaffold( 
+                                              body: SpeedManager(device: d)))
+                                            )
+                                                
                                   );
                                 }
                                 
@@ -131,7 +158,8 @@ class FindDevicesScreen extends StatelessWidget {
                               .push(MaterialPageRoute(builder: (context) {
                             r.device.connect();
                             globals.gdevice = r.device;
-                            return SpeedManager(device: r.device);
+
+                            return Scaffold( body: SpeedManager(device: r.device));
                           })),
                         ),
                       )
