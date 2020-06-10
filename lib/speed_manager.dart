@@ -8,8 +8,8 @@ import 'dart:convert';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'globals.dart' as globals;
 
+
 class SpeedManager extends StatefulWidget {
-  
   final BluetoothDevice device;
 
   const SpeedManager({Key key, this.device} ) : super(key: key);
@@ -21,16 +21,16 @@ class SpeedManager extends StatefulWidget {
 class _SpeedManagerState extends State<SpeedManager> {
   int speed = 0;
   bool isOn = false;
+
+  //Init state to activate the find characteristics button
   @override
-    void initState(){
-      print("used once");
-      findCharacteristic();
-}
-    
+  void initState(){  
+    print("used once");
+    findCharacteristic();
+  }  
     
   @override
   Widget build(BuildContext context) {
-
     return Container(
       color: Theme.of(context).backgroundColor,
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -104,15 +104,16 @@ class DebugBorder extends StatelessWidget {
   }
 }
 
+//Function to print the speed state and send it to the Bluno
 void sendChar(int i) async{
     print(i);
     String stringValue = i.toString();
     globals.gC.write(utf8.encode(stringValue), withoutResponse: true);
 }
 
+//Function to scan for devices and get the global characteristic value of the Bluno
 void findCharacteristic() async{
     final BluetoothDevice device=globals.gdevice;
-
     List<BluetoothService> services = await device.discoverServices();
     for(BluetoothService service in services) {
       if (service.uuid.toString() == "0000dfb0-0000-1000-8000-00805f9b34fb"){
