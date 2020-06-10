@@ -1,3 +1,6 @@
+// Emergency Windshield Wiper App v1
+// 
+//
 // TCi Summer 2020
 
 import 'dart:async';
@@ -7,7 +10,6 @@ import 'package:flutter_blue/flutter_blue.dart';
 
 import 'package:flutter_bluetooth/widgets.dart';
 import 'package:flutter_bluetooth/speed_manager.dart';
-import 'package:flutter_bluetooth/widgets/send_characteristic.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'globals.dart' as globals;
@@ -21,6 +23,7 @@ class FlutterBlueApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //Awesome themese set up by Trish
       themeMode: ThemeMode.system,
       theme: ThemeData(
         backgroundColor: Colors.white,
@@ -65,6 +68,9 @@ class FlutterBlueApp extends StatelessWidget {
   }
 }
 
+//==========================================================================================================
+// Screen that first shows up before the bluetooth is activated.
+//==========================================================================================================
 class BluetoothOffScreen extends StatelessWidget {
   const BluetoothOffScreen({Key key, this.state}) : super(key: key);
 
@@ -97,6 +103,8 @@ class BluetoothOffScreen extends StatelessWidget {
   }
 }
 //==========================================================================================================
+// Screen that searches for devices. 
+//==========================================================================================================
 class FindDevicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -104,7 +112,7 @@ class FindDevicesScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Find Devices'),
       ),
-      
+      //On the body there is a refresh indicator but we set this to instantly search
       body: RefreshIndicator(
         onRefresh: () =>
             FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
