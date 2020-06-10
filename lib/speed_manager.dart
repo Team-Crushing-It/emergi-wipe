@@ -39,13 +39,13 @@ class _SpeedManagerState extends State<SpeedManager> {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onVerticalDragEnd: (details) {
-            if (details.velocity.pixelsPerSecond.dy > 0 && speed > 1) {
+            if (details.velocity.pixelsPerSecond.dy > 0 && speed > 1 && isOn) {
              // widget.setSpeed(speed - 1);
               sendChar(speed-1);
               setState(() {
                 speed -= 1;
               });
-            } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6) {
+            } else if (details.velocity.pixelsPerSecond.dy < 0 && speed < 6 && isOn) {
             //  widget.setSpeed(speed + 1);
               sendChar(speed+1);
               setState(() {
