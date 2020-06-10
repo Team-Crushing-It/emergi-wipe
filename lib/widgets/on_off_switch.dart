@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+//==========================================================================================================
+// A switch that toggles whether the device is on or off
+//==========================================================================================================
 class OnOffSwitch extends StatelessWidget {
   final bool isOn;
   final Function onTap;
