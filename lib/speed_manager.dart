@@ -32,6 +32,7 @@ class _SpeedManagerState extends State<SpeedManager> {
   void initState() {
     print("used once");
     findCharacteristic();
+    sendChar(0);
   }
 
   @override
