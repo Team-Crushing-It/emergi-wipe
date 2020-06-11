@@ -25,7 +25,7 @@ class SpeedManager extends StatefulWidget {
 
 class _SpeedManagerState extends State<SpeedManager> {
   int speed = 0;
-  bool isOn = false;
+  bool isOn = true;
 
   //Init state to activate the find characteristics button
   @override
