@@ -155,7 +155,7 @@ class FindDevicesScreen extends StatelessWidget {
                           result: r,
                           onTap: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            r.device.connect();
+                            
                             return Scaffold( body: SpeedManager(device: r.device));
                           })),
                         ),

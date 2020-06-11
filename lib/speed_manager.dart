@@ -31,12 +31,16 @@ class _SpeedManagerState extends State<SpeedManager> {
   @override
   void initState() {
     // This is for the bluetooth
-    findCharacteristic();
-    // a hacked way to dispose
-    new MethodChannel("flutter.temp.channel")
-        .setMethodCallHandler(platformCallHandler);
+    widget.device.connect().then((value) {
+      print('Async done');
+      findCharacteristic();
 
-        super.initState();
+      // a hacked way to dispose
+      new MethodChannel("flutter.temp.channel")
+          .setMethodCallHandler(platformCallHandler);
+    });
+
+    super.initState();
   }
 
   @override
