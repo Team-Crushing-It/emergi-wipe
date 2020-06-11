@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth/widgets/emergi_wipe_logo.dart';
 import 'package:flutter_bluetooth/widgets/on_off_switch.dart';
 import 'package:flutter_bluetooth/widgets/speed_pyramid.dart';
@@ -24,15 +24,19 @@ class SpeedManager extends StatefulWidget {
 }
 
 class _SpeedManagerState extends State<SpeedManager> {
-  int speed = 0;
+  int speed = 4;
   bool isOn = true;
 
   //Init state to activate the find characteristics button
   @override
   void initState() {
-    print("used once");
+    // This is for the bluetooth
     findCharacteristic();
-    sendChar(0);
+    // a hacked way to dispose
+    new MethodChannel("flutter.temp.channel")
+        .setMethodCallHandler(platformCallHandler);
+
+        super.initState();
   }
 
   @override
@@ -98,11 +102,9 @@ class _SpeedManagerState extends State<SpeedManager> {
                 onTap: () {
                   if (isOn) {
                     sendChar(0);
-
                   } else {
                     findCharacteristic();
                     sendChar(speed);
-                    
                   }
                   setState(() {
                     isOn = !isOn;
@@ -113,26 +115,31 @@ class _SpeedManagerState extends State<SpeedManager> {
   }
 
   //Function to print the speed state and send it to the Bluno
-void sendChar(int i) async {
-  print(i);
-  String stringValue = i.toString();
-  gC.write(utf8.encode(stringValue), withoutResponse: true);
-}
+  void sendChar(int i) async {
+    print(i);
+    String stringValue = i.toString();
+    gC.write(utf8.encode(stringValue), withoutResponse: true);
+  }
 
 //Function to scan for devices and get the global characteristic value of the Bluno
-void findCharacteristic() async {
-  List<BluetoothService> services = await widget.device.discoverServices();
-  for (BluetoothService service in services) {
-    if (service.uuid.toString() == "0000dfb0-0000-1000-8000-00805f9b34fb") {
-      var characteristics = service.characteristics;
-      for (BluetoothCharacteristic c in characteristics) {
-        if (c.uuid.toString() == "0000dfb1-0000-1000-8000-00805f9b34fb") {
-          gC = c;
+  void findCharacteristic() async {
+    List<BluetoothService> services = await widget.device.discoverServices();
+    for (BluetoothService service in services) {
+      if (service.uuid.toString() == "0000dfb0-0000-1000-8000-00805f9b34fb") {
+        var characteristics = service.characteristics;
+        for (BluetoothCharacteristic c in characteristics) {
+          if (c.uuid.toString() == "0000dfb1-0000-1000-8000-00805f9b34fb") {
+            gC = c;
+          }
         }
       }
     }
   }
-}
-}
 
-
+  Future<dynamic> platformCallHandler(MethodCall call) async {
+    if (call.method == "destroy") {
+      print("destroy");
+      dispose();
+    }
+  }
+}
