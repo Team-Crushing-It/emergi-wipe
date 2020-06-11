@@ -97,8 +97,11 @@ class _SpeedManagerState extends State<SpeedManager> {
                 onTap: () {
                   if (isOn) {
                     sendChar(0);
+
                   } else {
+                    findCharacteristic();
                     sendChar(speed);
+                    
                   }
                   setState(() {
                     isOn = !isOn;
